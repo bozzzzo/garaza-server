@@ -30,7 +30,7 @@ def index():
 def garagedoor(doornum=0):
  if doornum == '0':
    return 'No door number specified'
- return f'Door number {doornum} cycled.'
+ return 'Door number {} cycled.'.format(doornum)
 
 # Handle http requests to /garagedoor
 @route('/garagedoor/:doornum')
@@ -42,7 +42,7 @@ def garagedoor(doornum=0):
    GPIO.output(pin, True)
    time.sleep(.8)
    GPIO.output(pin, False)
-   redirect(f"/garagedoor/{doornum}/cycled")
+   redirect("/garagedoor/{}/cycled".format(doornum))
  return 'Go away!'
 
 try:
