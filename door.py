@@ -3,7 +3,7 @@
 # Load libraries
 import RPi.GPIO as GPIO
 import time
-from bottle import route, run, template, redirect
+from bottle import route, run, template, redirect, request
 
 # Set up the GPIO pins
 GPIO.setmode(GPIO.BOARD)
@@ -30,7 +30,12 @@ def index():
 def garagedoor(doornum=0):
  if doornum == '0':
    return 'No door number specified'
- return 'Door number {} cycled.'.format(doornum)
+ return '''<html><body>
+    <h1>Door number {doornum} cycled.</h1>
+    <a href="{again}">Do it again</a>
+    </body></html>'''.format(
+        doornum=doornum,
+         again=request.base_url.replace("/cycled",""))
 
 # Handle http requests to /garagedoor
 @route('/garagedoor/:doornum')
