@@ -27,7 +27,7 @@ def index():
 
 # Handle http requests to /garagedoor
 @route('/garagedoor/:doornum/cycled')
-def garagedoor(doornum=0):
+def doropen(doornum=0):
  if doornum == '0':
    return 'No door number specified'
  return '''<html><body>
@@ -50,8 +50,9 @@ def garagedoor(doornum=0):
    redirect("/garagedoor/{}/cycled".format(doornum))
  return 'Go away!'
 
-try:
-  run(host='0.0.0.0', port=1234)
-except:
-  GPIO.cleanup()
-  print("Done")
+if __name__ == '__main__':
+    try:
+      run(host='0.0.0.0', port=1234)
+    finally:
+      GPIO.cleanup()
+      print("Done")
