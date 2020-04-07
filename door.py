@@ -35,7 +35,7 @@ def doropen(doornum=0):
     <a href="{again}">Do it again</a>
     </body></html>'''.format(
         doornum=doornum,
-         again=request.base_url.replace("/cycled",""))
+         again=request.url.replace("/cycled",""))
 
 # Handle http requests to /garagedoor
 @route('/garagedoor/:doornum')
