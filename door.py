@@ -1,9 +1,13 @@
 # Python Script To Control Garage Door
 
 # Load libraries
-import RPi.GPIO as GPIO
+try:
+  import RPi.GPIO as GPIO
+except ModuleNotFoundError:
+  import fake_gpio as GPIO
+
 import time
-from bottle import route, run, template, redirect, request
+from bottle import route, run, view, redirect, request, post
 
 # Set up the GPIO pins
 GPIO.setmode(GPIO.BOARD)
@@ -11,34 +15,20 @@ pin=11
 GPIO.setup(pin, GPIO.OUT)
 GPIO.output(pin, False)   
 
-if False:
-	GPIO.output(pin, True)
-	time.sleep(.8)
-	GPIO.output(pin, False)
-	time.sleep(.8)
-	GPIO.output(pin, True)
-	time.sleep(.8)
-	GPIO.output(pin, False)
-	time.sleep(.8)
 # Handle http requests to the root address
 @route('/')
 def index():
- return 'Go away.'
+ return redirect("/garagedoor/1")
+
+@route('/garagedoor/<doornum>/<cycled>')
+@route('/garagedoor/<doornum>')
+@view('./door.html')
+def garagedoor(doornum=0, cycled=False):
+  return dict(doornum=doornum,
+              cycled=cycled)
 
 # Handle http requests to /garagedoor
-@route('/garagedoor/:doornum/cycled')
-def doropen(doornum=0):
- if doornum == '0':
-   return 'No door number specified'
- return '''<html><body>
-    <h1>Door number {doornum} cycled.</h1>
-    <a href="{again}">Do it again</a>
-    </body></html>'''.format(
-        doornum=doornum,
-         again=request.url.replace("/cycled",""))
-
-# Handle http requests to /garagedoor
-@route('/garagedoor/:doornum')
+@post('/garagedoor/<doornum>')
 def garagedoor(doornum=0):
  if doornum == '0':
    return 'No door number specified'

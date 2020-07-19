@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <style>
+         body { font-size: 1cm }
+         button { font-size: 1cm }
+        </style>
+    </head>
+    <body>
+        <h1> Garage door {{doornum}}</h1>
+        % if cycled:
+        <h2> Door cycled </h2>
+        % end
+        <form method="POST" action="/garagedoor/{{doornum}}">
+            <button type="submit">
+                Cycle
+                % if cycled:
+                again
+                % end
+            </button>
+        </form>
+    </body>
+</html>
